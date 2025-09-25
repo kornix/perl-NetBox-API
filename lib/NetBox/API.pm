@@ -28,7 +28,7 @@ In GraphQL mode only `retrieve()` method is implemented in NetBox!
 
 =item B<*>
 
-No custom fields can be used for response filtering in GraphQL mode!
+Custom fields can be used as filters only in Netbox v4.4+!
 
 =item B<*>
 
@@ -255,6 +255,25 @@ Note a special `fields` argument, which is not a query argument, but a
 returned fields filter. It is mandatory in GraphQL mode. In REST mode,
 if `fields` argument is omitted, all object's fields are returned. Only
 first level fields can be specified.
+
+In GraphQL mode a precrafted query can be passed to the method using
+`raw` argument. In this case `fields` argument can be omitted:
+
+    my @cables = $netbox->retrieve('cable_list', { 'raw' => q[
+        query cable_list {
+            cable_list (filters: {
+                type: TYPE_SMF_OS2,
+                tenant: {
+                    slug: { i_exact: "tenant_slug" }
+                }
+            }) {
+                id
+                tenant { name }
+                description
+                custom_fields
+            }
+        }
+    ] });
 
 =cut #}}}
 

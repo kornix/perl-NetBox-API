@@ -23,6 +23,7 @@ our $VERSION = $NetBox::API::Common::VERSION;
 
 sub __call :prototype($$$$$) ($class, $self, $method, $query, $vars = {}) {
     #{{{
+    delete $vars->{'raw'} if exists $vars->{'raw'};
     return $class->GET($self, $query, $vars) if $method eq 'GET';
     my @result = qw();
     my $request = HTTP::Request->new($method, sprintf('%s/%s/', $self->baseurl, $query));

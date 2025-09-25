@@ -20,20 +20,47 @@ our $VERSION = $NetBox::API::Common::VERSION;
 
 sub __call :prototype($$$$$) ($class, $self, $method, $query, $vars = {}) {
     #{{{
-    return $class->GET($self, $query, $vars) if $method eq 'GET';
-    $self->__seterror(NetBox::API::Common::E_NOMETHOD, $class, $method);
-    return !$self->error;
-} #}}}
-
-sub GET :prototype($$$$) ($class, $self, $query, $vars = {}) {
-    #{{{
     my $graphql = GraphQL::Client->new('url' => $self->baseurl, 'unpack' => 0);
     my $headers = $self->headers;
-    my $fields = join ', ', @{$vars->{'fields'}};
-    delete $vars->{'fields'};
-    my $q = sprintf 'query %s ($id: ID!) { %s(id: $id) { %s } }', $query, $query, $fields;
-    my $response = $graphql->execute($q, $vars, $query, { 'headers' => $headers });
-    return defined $response->{'data'}{$query} ? ( $response->{'data'}{$query} ) : qw();
+    my $response = {};
+    my $q = '';
+    if (defined $vars->{'raw'}) {
+        $q = $vars->{'raw'};
+        $vars = {};
+    } elsif ($query !~ /_list$/) {
+        my $fields = join ', ', @{$vars->{'fields'}};
+        delete $vars->{'fields'};
+        $q = sprintf 'query %s ($id: ID!) { %s(id: $id) { %s } }', $query, $query, $fields;
+    } else {
+        $self->__seterror(NetBox::API::Common::E_NOTIMPLEMENTED);
+        return qw();
+    }
+    eval {
+        local $SIG{'ALRM'} = sub { die "operation timed out\n" };
+        alarm $self->timeout;
+        $response = $graphql->execute($q, $vars, $query, { 'headers' => $headers });
+        alarm 0;
+    };
+    if ($@) {
+        $self->__seterror(NetBox::API::Common::E_TIMEOUT);
+        return qw();
+    }
+    if (defined $response->{'data'} and defined $response->{'data'}{$query}) {
+        return @{$response->{'data'}{$query}};
+    } else {
+        my $line    = 'N/A';
+        my $column  = 'N/A';
+        my $errmsg  = 'no additional details provided';
+        if (defined $response->{'errors'} and defined $response->{'errors'}[0]) {
+            $line   = $response->{'errors'}[0]{'locations'}[0]{'line'};
+            $column = $response->{'errors'}[0]{'locations'}[0]{'column'};
+            $errmsg = $response->{'errors'}[0]{'message'};
+        }
+        $self->__seterror(NetBox::API::Common::E_BADQUERY, $line, $column, $errmsg);
+        return qw();
+    }
 } #}}}
+
+sub GET {}
 
 1;
