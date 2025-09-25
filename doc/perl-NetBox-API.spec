@@ -1,11 +1,11 @@
 Name:           perl-NetBox-API
-Version:        0.0.4
+Version:        0.1.0
 Release:        1%{?dist}
-Summary:        NetBox IPAM/DCIM REST API perl module
+Summary:        NetBox API perl module
 License:        Distributable, see LICENSE
 Group:          Development/Libraries
-URL:            http://search.cpan.org/dist/NetBox-API/
-Source0:        http://www.cpan.org/modules/by-module/NetBox/NetBox-API-%{version}.tar.gz
+URL:            https://github.com/kornix/perl-NetBox-API
+Source0:        NetBox-API-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  perl(ExtUtils::MakeMaker)
@@ -46,22 +46,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc Changes LICENSE Makefile MYMETA.json MYMETA.yml README
+%doc Changes LICENSE MYMETA.json MYMETA.yml README.md
 %dir %{perl_vendorlib}/NetBox
 %{perl_vendorlib}/NetBox*
 %{_mandir}/man3/NetBox*
 
 %changelog
 
+* Thu Sep 25 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.1.0
+- Initial public release.
+
 * Thu Apr 17 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.0.4
-- NetBox::API::Tenant and NetBox::API::Session modules removed;
-- fields filtering in response added.
-
-* Fri Oct 18 2024 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.0.3
-- NetBox::API::Tenant module added.
-
-* Sat Oct 12 2024 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.0.2
-- NetBox::API::Session module added.
+- Response fields filtering added.
 
 * Mon Mar 04 2024 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.0.1-1
-- Initial public release.
+- Initial release.
