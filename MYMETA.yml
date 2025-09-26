@@ -1,7 +1,7 @@
 ---
-abstract: unknown
+abstract: 'perl interface to NetBox API'
 author:
-  - unknown
+  - 'Volodymyr Pidgornyi <vp@dtel-ix.net>'
 build_requires:
   ExtUtils::MakeMaker: '0'
 configure_requires:
@@ -17,5 +17,9 @@ no_index:
   directory:
     - t
     - inc
-version: '0'
+requires:
+  Test::More: '0'
+resources:
+  repository: https://github.com/kornix/perl-NetBox-API.git
+version: v0.1.1
 x_serialization_backend: 'CPAN::Meta::YAML version 0.018'

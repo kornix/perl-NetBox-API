@@ -1,7 +1,7 @@
 {
-   "abstract" : "unknown",
+   "abstract" : "perl interface to NetBox API",
    "author" : [
-      "unknown"
+      "Volodymyr Pidgornyi <vp@dtel-ix.net>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "ExtUtils::MakeMaker version 7.70, CPAN::Meta::Converter version 2.150010",
@@ -29,9 +29,21 @@
          "requires" : {
             "ExtUtils::MakeMaker" : "0"
          }
+      },
+      "runtime" : {
+         "requires" : {
+            "Test::More" : "0"
+         }
       }
    },
    "release_status" : "stable",
-   "version" : "0",
+   "resources" : {
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/kornix/perl-NetBox-API.git",
+         "web" : "https://github.com/kornix/perl-NetBox-API"
+      }
+   },
+   "version" : "v0.1.1",
    "x_serialization_backend" : "JSON::PP version 4.16"
 }

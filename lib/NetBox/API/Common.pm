@@ -4,7 +4,7 @@ use warnings 'FATAL' => 'all';
 use version;
 
 use constant {
-    VERSION          => version->declare('v0.1.0'),
+    VERSION          => version->declare('v0.1.1'),
     E_OK             => [   0, '' ],
     E_NOCLASS        => [   1, '%s module can not be loaded' ],
     E_NOMETHOD       => [   2, '%s class does not implement method %s' ],

@@ -1,7 +1,7 @@
 Name:           perl-NetBox-API
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
-Summary:        NetBox API perl module
+Summary:        perl interface to NetBox API
 License:        Distributable, see LICENSE
 Group:          Development/Libraries
 URL:            https://github.com/kornix/perl-NetBox-API
@@ -10,14 +10,20 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  perl(ExtUtils::MakeMaker)
 Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-Requires:	perl(LWP::UserAgent)
+Requires:	perl(Class::Load)
+Requires:	perl(Class::XSAccessor)
+Requires:	perl(Encode)
+Requires:	perl(GraphQL::Client)
+Requires:	perl(HTTP::Request)
 Requires:	perl(JSON)
+Requires:	perl(LWP::UserAgent)
+Requires:	perl(URI::Escape)
 Provides:	perl(NetBox::API)
-Provides:	perl(NetBox::API::Tenant)
-Provides:	perl(NetBox::API::Session)
+Provides:	perl(NetBox::API::REST)
+Provides:	perl(NetBox::API::GraphQL)
 
 %description
-NetBox IPAM/DCIM REST API perl module.
+Perl interface to NetBox DCIM/IPAM both REST and GraphQL API
 
 %prep
 %setup -q -n NetBox-API-%{version}
@@ -38,8 +44,8 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 
 %{_fixperms} $RPM_BUILD_ROOT/*
 
-#check
-#make test
+check
+make test
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -52,6 +58,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/NetBox*
 
 %changelog
+
+* Fri Sep 26 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.1.1
+- CPAN compatibility fixes.
 
 * Thu Sep 25 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.1.0
 - Initial public release.

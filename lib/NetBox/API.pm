@@ -483,7 +483,11 @@ Volodymyr Pidgornyi, vpE<lt>atE<gt>dtel-ix.net;
 
 =over 4
 
-=item B<v0.0.5>
+=item B<v0.1.1>
+
+- CPAN compatibility fixes.
+
+=item B<v0.1.0>
 
 - Initial public release.
 
