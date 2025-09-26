@@ -178,7 +178,7 @@ different `METHOD` argument required, as described in NetBox REST API Overview:
 
 - `retrieve()` - **GET**;
 - `create()` - **POST**;
-- `update()` - **PUT**;
+- `update()` - **PATCH**;
 - `replace()` - **PUT**;
 - `delete()` - **DELETE**
 
