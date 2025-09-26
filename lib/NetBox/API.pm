@@ -4,7 +4,7 @@ package NetBox::API;
 
 =head1 NAME
 
-B<NetBox::API> - Perl interface to NetBox API
+B<NetBox::API> - perl5 interface to NetBox API
 
 =head1 DESCRIPTION
 
@@ -22,18 +22,34 @@ it makes code clearer. However, it requires perl 5.10+. All
 more or less modern OSes has much more newer perl included, so
 don't think it will be a problem.
 
-=item B<*>
+=back
 
-In GraphQL mode only `retrieve()` method is implemented in NetBox!
+=head1 LIMITATIONS
 
-=item B<*>
+Unlike REST, GraphQL mode has a bunch of limitations, which (in my opinion)
+makes it less convinient then REST. However, I have to admit, it works faster,
+noticeably faster, then REST. So, about the limitations:
 
-Custom fields can be used as filters only in Netbox v4.4+!
+=over 4
 
-=item B<*>
+=item B<*> GraphQL is disabled by default
 
-To make using of GraphQL mode possible it is required to set B<GRAPHQL_ENABLED>
-option to `true` in NetBox configuration.
+GraphQL support is disabled in NetBox by default; to enable it, you have to
+set `GRAPHQL_ENABLED` option to `true` in NetBox configuration file;
+
+=item B<*> GraphQL is intended for data retrievement only
+
+=item E<10> E<8>
+
+=item B<*> Custom fields as filters
+
+Custom fields can be used as filters in NetBox **v4.4+** only!
+
+=item B<*> Custom fields returned
+
+It is possible either not to retrieve custom fields at all or to retrieve all
+of them - there is no way to retrieve only part of them. At least in current
+NetBox version.
 
 =back
 
@@ -130,7 +146,7 @@ sub new :prototype($%) ($class, %options) {
                                                                                                                                     
 =item B<new(OPTIONS)>                                                                                                 
                                                                                                                                     
-B<NetBox::API> object constructor. Is used as follows:
+NetBox::API object constructor. Is used as follows:
                                                                                                                                     
     my $netbox = NetBox::API->new(
         'baseurl' => 'http://localhost:8001',
@@ -156,7 +172,8 @@ Can be either `rest` for REST interface (default) or `graphql` for GraphQL.
 
 =item B<limit> => INTEGER
 
-Objects count per page. Affects `retrieve()` method only.
+Objects count returned per single REST API query. Affects `retrieve()` method
+in REST mode only.
 
 =item B<timeout> => INTEGER
 
@@ -202,32 +219,6 @@ Be quiet when set to `true` (which is default). Currently not implemented.
     return $self;
 } #}}}
 
-sub error :prototype($) ($self) {
-    #{{{
-
-=pod #{{{ error() method description
-
-=item B<error()>
-
-Takes no arguments. Returns `false` if B<NetBox::API> object is
-defined and `error` flag is not set and `true` otherwise.
-
-=item B<errno()>
-
-Takes no arguments. Returns error code. 0 is returned for no error.
-
-=item B<errmsg()>
-
-Takes no arguments. Returns error message. Empty string ('') is
-returned for no error.
-
-=cut #}}}
-
-    return (defined $self and isFalse $self->{'error'})
-        ? boolean::false
-        : boolean::true;
-} #}}}
-
 sub retrieve :prototype($$$) ($self, $query, $vars = {}) {
     #{{{
 
@@ -239,7 +230,7 @@ Retrieve an array of objects.
 
 `QUERY` differs for REST and GraphQL modes: in REST mode it is a final
 part of URI without trailing '/' (e.g. 'tenancy/tenants' or 'dcim/cables')
-and in GraphQL mode is either $OBJECT or $OBJECT_list as described in
+and in GraphQL mode is either `$OBJECT` or `$OBJECT_list` as described in
 NetBox GraphQL API Overview.
 
 `OPTIONS` is a reference to a HASH of query arguments, e.g.:
@@ -287,7 +278,7 @@ sub create :prototype($$$) ($self, $query, $vars = {}) {
 
 =item B<create(QUERY, [ OPTIONS ])>
 
-Create new object(-s). Is available only in REST mode. All mandatory
+Create new object(-s). Is available in REST mode only. All mandatory
 fields has to be specified:
 
     my @cables = $self->create('dcim/cables', [ {
@@ -318,7 +309,7 @@ sub update :prototype($$$) ($self, $query, $vars = {}) {
 
 =item B<update(QUERY, { OPTIONS })>
 
-Update existing object(-s). Is available only in REST mode. Expects
+Update existing object(-s). Is available in REST mode only. Expects
 specification of the field(-s) being modified only. Can be called in
 two ways:
 
@@ -339,7 +330,8 @@ or
     ]);
     die $netbox->errmsg if $netbox->error;
 
-Returns either an array of updated objects on success or an empty array.
+Returns either an array of updated objects on success or an empty array
+on error.
 
 =cut #}}}
 
@@ -354,7 +346,7 @@ sub replace :prototype($$$) ($self, $query, $vars = {}) {
 =item B<replace(QUERY, [ OPTIONS ])>
 
 Similar to `update()`, but existing object is replaced with at a whole.
-Is available only in REST mode. All mandatory fields has to be specified.
+Is available in REST mode only. All mandatory fields has to be specified.
 
 =cut #}}}
 
@@ -368,7 +360,7 @@ sub delete :prototype($$$) ($self, $query, $vars = {}) {
 
 =item B<delete(QUERY [, OPTIONS ])>
 
-Delete an existing object or several objects. Is available only in REST mode.
+Delete an existing object or several objects. Is available in REST mode only.
 Can be called in two ways, e.g. either:
 
     $netbox->delete('dcim/cables', [
@@ -383,9 +375,9 @@ or
     $netbox->delete('dcim/cables/11');
     ...
 
-Always returns empty array.
+Always returns an empty array.
 
-First way requires OPTIONS - a reference to an array, containing a list of
+First way requires `OPTIONS` - a reference to an array, containing a list of
 deletion arguments - to be set. It is preferred as more universal then the
 second one since it allows to delete several objects in a single query.
 
@@ -401,13 +393,13 @@ sub __call :prototype($$$$) ($self, $method, $query, $vars = {}) {
 
 =item B<__call(METHOD, QUERY, OPTIONS)>
 
-Universal method making it all - all service methods barely wrappers around
+Universal method making it all - all service methods are barely wrappers around
 this one, which brings them all and binds 'em with a different `METHOD`
 argument required, as described in NetBox REST API Overview:
 
 =over 4
 
-=item B<*> retrieve() -S< >'GET';
+=item B<*> retrieve() -S< >`GET`;
 
 =item B<*> create() -S<   >`POST`;
 
@@ -423,6 +415,8 @@ argument required, as described in NetBox REST API Overview:
 
 It's unlikely you'll ever want to use this method directly - it is just
 inconvenient, although not forbidden.
+
+=back
 
 =cut #}}}
 
@@ -441,6 +435,36 @@ inconvenient, although not forbidden.
     return $class->__call($self, $method, $query, $vars);
 } #}}}
 
+sub error :prototype($) ($self) {
+    #{{{
+
+=pod #{{{ error() method description
+
+=head1 ERROR HANDLING
+
+=over 4
+
+=item B<error()>
+
+Takes no arguments. Returns `false` if NetBox::API object is
+defined and `error` flag is not set and `true` otherwise.
+
+=item B<errno()>
+
+Takes no arguments. Returns error code. `0` is returned for no error.
+
+=item B<errmsg()>
+
+Takes no arguments. Returns error message. Empty string (`''`) is
+returned for no error.
+
+=cut #}}}
+
+    return (defined $self and isFalse $self->{'error'})
+        ? boolean::false
+        : boolean::true;
+} #}}}
+
 sub __seterror :prototype($$@) ($self, $error = NetBox::API::Common::E_OK, @list) {
     #{{{
 
@@ -451,6 +475,8 @@ sub __seterror :prototype($$@) ($self, $error = NetBox::API::Common::E_OK, @list
 Set or reset (when called with no arguments) error flag, error code and error
 message. It is called implicitly when any service method is called and should
 not be called explicitly in any circumstances. 
+
+=back
 
 =cut
 
@@ -467,21 +493,24 @@ sub DESTROY {}
 
 =pod
 
-=back
-
 =head1 B<AUTHORS>
 
 =over 4
 
-=item *
-
-Volodymyr Pidgornyi, vpE<lt>atE<gt>dtel-ix.net;
+=item B<*> Volodymyr Pidgornyi, vpE<lt>atE<gt>dtel-ix.net;
 
 =back
 
 =head1 B<CHANGELOG>
 
 =over 4
+
+=item B<v0.1.4>
+
+- LICENSE added;
+- automation issues fixes;
+- README.md is now generated from module POD;
+- RPM spec-file fixes.
 
 =item B<v0.1.3>
 

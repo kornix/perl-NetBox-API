@@ -1,5 +1,5 @@
 Name:           perl-NetBox-API
-Version:        0.1.3
+Version:        0.1.4
 Release:        1%{?dist}
 Summary:        perl interface to NetBox API
 License:        Distributable, see LICENSE
@@ -52,10 +52,16 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc Changes LICENSE MYMETA.json MYMETA.yml README.md
 %dir %{perl_vendorlib}/NetBox
-%{perl_vendorlib}/NetBox*
+%{perl_vendorlib}/NetBox/*
 %{_mandir}/man3/NetBox*
 
 %changelog
+
+* Fri Sep 26 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.1.4
+- LICENSE added;
+- automation issues fixed;
+- README.md is now generated from module POD;
+- RPM spec-file fixes.
 
 * Fri Sep 26 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.1.3
 - CPAN compatibility fixes.

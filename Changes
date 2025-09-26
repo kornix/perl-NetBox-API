@@ -1,5 +1,11 @@
 Revision history for perl module NetBox::API.
 
+0.1.4 Fri Sep 26 16:45:50 EEST 2025
+	- Added LICENSE;
+	- Fixed automation issues;
+	- README.md is now generated from module POD;
+	- Fixed RPM spec-file.
+
 0.1.3 Fri Sep 26 09:35:47 EEST 2025
 	- CPAN compatibility fixes. Again.
 

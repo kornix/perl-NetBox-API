@@ -8,7 +8,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME         => 'NetBox::API',
     AUTHOR       => 'Volodymyr Pidgornyi <vp@dtel-ix.net>',
-    VERSION      => '0.1.3',
+    VERSION      => '0.1.4',
     ABSTRACT     => 'perl interface to NetBox API',
     LICENSE      => 'apache_2_0',
     META_MERGE => {
