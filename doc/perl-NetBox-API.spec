@@ -1,5 +1,5 @@
 Name:           perl-NetBox-API
-Version:        0.1.1
+Version:        0.1.3
 Release:        1%{?dist}
 Summary:        perl interface to NetBox API
 License:        Distributable, see LICENSE
@@ -19,8 +19,6 @@ Requires:	perl(JSON)
 Requires:	perl(LWP::UserAgent)
 Requires:	perl(URI::Escape)
 Provides:	perl(NetBox::API)
-Provides:	perl(NetBox::API::REST)
-Provides:	perl(NetBox::API::GraphQL)
 
 %description
 Perl interface to NetBox DCIM/IPAM both REST and GraphQL API
@@ -59,7 +57,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 
-* Fri Sep 26 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.1.1
+* Fri Sep 26 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.1.3
 - CPAN compatibility fixes.
 
 * Thu Sep 25 2025 Volodymyr Pidgornyi <vp@dtel-ix.net> 0.1.0

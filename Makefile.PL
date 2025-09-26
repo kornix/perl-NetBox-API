@@ -8,7 +8,7 @@ $makemakerversion =~ s/_//g;
 WriteMakefile(
     NAME         => 'NetBox::API',
     AUTHOR       => 'Volodymyr Pidgornyi <vp@dtel-ix.net>',
-    VERSION      => '0.1.1',
+    VERSION      => '0.1.3',
     ABSTRACT     => 'perl interface to NetBox API',
     META_MERGE => {
         'meta-spec' => { version => 2 },

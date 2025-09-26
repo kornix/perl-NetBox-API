@@ -483,6 +483,10 @@ Volodymyr Pidgornyi, vpE<lt>atE<gt>dtel-ix.net;
 
 =over 4
 
+=item B<v0.1.3>
+
+- CPAN compatibility fixes. Again.
+
 =item B<v0.1.1>
 
 - CPAN compatibility fixes.

@@ -196,6 +196,8 @@ Takes no arguments. Returns error message. Empty string ('') is returned for no 
 Set or reset (when called with no arguments) error flag, error code and error message. It is called implicitly when any service
 method is called and should not be called explicitly in any circumstances.
 ## CHANGELOG
+### v0.1.3 - 2025-09-26
+- minor CPAN issue fixes. Again.
 ### v0.1.1 - 2025-09-26
 - minor CPAN issue fixes.
 ### v0.1.0 - 2025-09-25
